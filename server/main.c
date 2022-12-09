@@ -43,10 +43,10 @@ void dns_response_udp(int sockfd)
 	char buf[PACKET_SIZE + 4];
 	u_int16_t req_size;
 	dns_packet *pkt;
-	struct sockaddr_in from;
+	struct sockaddr_in client;
 
-	socklen_t from_len = 0;
-	req_size = (u_int16_t)recvfrom(sockfd, buf, PACKET_SIZE + 4, 0, (struct sockaddr *)&from, &from_len);
+	socklen_t client_len = 0;
+	req_size = (u_int16_t)recvfrom(sockfd, buf, PACKET_SIZE + 4, 0, (struct sockaddr *)&client, &client_len);
 	printf("client: %s %d\n", strerror(errno), req_size);
 
 	pkt = calloc(1, sizeof(dns_packet));
@@ -54,7 +54,8 @@ void dns_response_udp(int sockfd)
 
 	free(pkt->data);
 	free(pkt);
-	sendto(sockfd, (const char *)dn_response, 96, 0, (const struct sockaddr *)&from, from_len);
+	//Not working client returns time out????????
+	sendto(sockfd, (const char *)dn_response, 96, 0, (const struct sockaddr *)&client, client_len);
 }
 
 int main(int argc, char *argv[])
