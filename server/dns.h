@@ -6,8 +6,8 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <string.h>
-#define PACKET_SIZE 512
-#define HEADER_SIZE 12
+#define DNS_PACKET_SIZE 512
+#define DNS_HEADER_SIZE 12
 #define DNS_PORT 53
 #define DNS_IP "0.0.0.0"
 #include "mylib.h"

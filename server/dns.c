@@ -7,9 +7,9 @@ BOOL dns_req_parse(dns_packet *pkt, const void *data, u_int16_t size)
 	dns_header_parse(&pkt->header, data);
 
 	//Rest o fhte quest less the header
-	pkt->data = malloc(size - HEADER_SIZE);
-	memcpy(pkt->data, data + HEADER_SIZE, size - HEADER_SIZE);
-	pkt->data_size = size - HEADER_SIZE;
+	pkt->data = malloc(size - DNS_HEADER_SIZE);
+	memcpy(pkt->data, data + DNS_HEADER_SIZE, size - DNS_HEADER_SIZE);
+	pkt->data_size = size - DNS_HEADER_SIZE;
 	dns_question_parse(pkt);
 	return TRUE;
 }
@@ -33,7 +33,7 @@ void print_dns_header_parse(const dns_header *header)
 
 BOOL dns_header_parse(dns_header *header, const void *data)
 {
-	memcpy(header, data, HEADER_SIZE);
+	memcpy(header, data, DNS_HEADER_SIZE);
 
 	header->id = ntohs(header->id);
 	header->qr = ntohs(header->qr);

@@ -40,13 +40,13 @@ int get_udp_socket(struct sockaddr_in server_addr)
 
 void dns_response_udp(int sockfd)
 {
-	char buf[PACKET_SIZE + 4];
+	char buf[DNS_PACKET_SIZE + 4];
 	u_int16_t req_size;
 	dns_packet *pkt;
 	struct sockaddr_in from;
 
 	socklen_t from_len = 0;
-	req_size = (u_int16_t)recvfrom(sockfd, buf, PACKET_SIZE + 4, 0, (struct sockaddr *)&from, &from_len);
+	req_size = (u_int16_t)recvfrom(sockfd, buf, DNS_PACKET_SIZE + 4, 0, (struct sockaddr *)&from, &from_len);
 	printf("client: %s %d\n", strerror(errno), req_size);
 
 	pkt = calloc(1, sizeof(dns_packet));
