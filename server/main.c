@@ -45,13 +45,8 @@ void dns_response_udp(int sockfd)
 	dns_packet *pkt;
 	struct sockaddr_in client;
 
-<<<<<<< HEAD
-	socklen_t from_len = 0;
-	req_size = (u_int16_t)recvfrom(sockfd, buf, DNS_PACKET_SIZE + 4, 0, (struct sockaddr *)&from, &from_len);
-=======
 	socklen_t client_len = 0;
 	req_size = (u_int16_t)recvfrom(sockfd, buf, PACKET_SIZE + 4, 0, (struct sockaddr *)&client, &client_len);
->>>>>>> d9bbc751290dac5e1ea4d231350dfc59c52a8a13
 	printf("client: %s %d\n", strerror(errno), req_size);
 
 	pkt = calloc(1, sizeof(dns_packet));
