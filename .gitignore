@@ -101,7 +101,8 @@ include/divisible/*
 
 .idea/*.xml
 
-*/build/**/*
+*/build\*
+build\*
 
 include/*
 lib/*
@@ -110,3 +111,4 @@ test/test_runner
 
 #----Vscode
 */.vscode
+build/.cmake/api/v1/reply/target-ContinuousBuild-Debug-b3b24c89b8d8d3f3a098.json

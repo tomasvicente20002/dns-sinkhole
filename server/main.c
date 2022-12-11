@@ -46,14 +46,21 @@ void dns_response_udp(int sockfd)
 	struct sockaddr_in client;
 
 	socklen_t client_len = 0;
-	req_size = (u_int16_t)recvfrom(sockfd, buf, PACKET_SIZE + 4, 0, (struct sockaddr *)&client, &client_len);
-	printf("client: %s %d\n", strerror(errno), req_size);
+	req_size = (u_int16_t)recvfrom(sockfd, buf, DNS_PACKET_SIZE + 4, 0, (struct sockaddr *)&client, &client_len);
+	printf("Revice request -> Status:%s  Len:%d\n", strerror(errno), req_size);
 
 	pkt = calloc(1, sizeof(dns_packet));
+	
 	dns_req_parse(pkt, buf, req_size);
+
+
+	dns_forward(pkt);
 
 	free(pkt->data);
 	free(pkt);
+
+
+
 	//Not working client returns time out????????
 	sendto(sockfd, (const char *)dn_response, 96, 0, (const struct sockaddr *)&client, client_len);
 }
@@ -64,7 +71,7 @@ int main(int argc, char *argv[])
 
 	server_addr.sin_port = htons(DNS_PORT);
 	server_addr.sin_family = AF_INET;
-	server_addr.sin_addr.s_addr = inet_addr(DNS_IP);
+	server_addr.sin_addr.s_addr = inet_addr(DNS_LOCAl_IP);
 
 	int udp_sock = get_udp_socket(server_addr);
 	printf("DNS Server online\n");

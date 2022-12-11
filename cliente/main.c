@@ -122,7 +122,7 @@ void ngethostbyname(unsigned char *host, int query_type)
 
     dest.sin_family = AF_INET;
     dest.sin_port = htons(53);
-    dest.sin_addr.s_addr = inet_addr("0.0.0.0"); // dns servers
+    dest.sin_addr.s_addr = inet_addr("8.8.8.8"); // dns servers
 
     // Set the DNS structure to standard queries
     dns = (struct DNS_HEADER *)&buf;
@@ -152,8 +152,14 @@ void ngethostbyname(unsigned char *host, int query_type)
     qinfo->qtype = htons(query_type); // type of the query , A , MX , CNAME , NS etc
     qinfo->qclass = htons(1);         // its internet (lol)
 
+    int t = 0;
     printf("\nSending Packet...");
-    if (sendto(s, (char *)buf, sizeof(struct DNS_HEADER) + (strlen((const char *)qname) + 1) + sizeof(struct QUESTION), 0, (struct sockaddr *)&dest, sizeof(dest)) < 0)
+    t = sendto(s, (char *)buf,
+               sizeof(struct DNS_HEADER) + (strlen((const char *)qname) + 1) + sizeof(struct QUESTION),
+               0,
+               (struct sockaddr *)&dest,
+               sizeof(dest));
+    if (t < 0)
     {
         perror("sendto failed");
     }
@@ -162,7 +168,13 @@ void ngethostbyname(unsigned char *host, int query_type)
     // Receive the answer
     i = sizeof dest;
     printf("\nReceiving answer...");
-    if (recvfrom(s, (char *)buf, 65536, 0, (struct sockaddr *)&dest, (socklen_t *)&i) < 0)
+    if (recvfrom(
+            s,
+            (char *)buf,
+            65536,
+            0,
+            (struct sockaddr *)&dest,
+            (socklen_t *)&i) < 0)
     {
         perror("recvfrom failed");
     }
