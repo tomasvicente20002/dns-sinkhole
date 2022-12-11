@@ -96,20 +96,22 @@ typedef struct dns_packet_st
 	char *row_packet_data;
 } dns_packet;
 
-struct RES_RECORD
-{
-    unsigned char *name;
-    struct R_DATA *resource;
-    unsigned char *rdata;
-};
-
-struct R_DATA
+typedef struct dns_answer_details_st
 {
     unsigned short type;
     unsigned short _class;
     unsigned int ttl;
     unsigned short data_len;
-};
+} dns_answer_details;
+
+typedef struct dns_answer_st
+{
+    unsigned char *name;
+    dns_answer_details *resource;
+    unsigned char *rdata;
+} dns_answer;
+
+
 
 BOOL dns_question_parse(dns_packet *pkt);
 BOOL dns_header_parse(dns_header *header, const void *data);
