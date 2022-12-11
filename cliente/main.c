@@ -86,42 +86,7 @@ typedef struct
 
 
 
-int main() {
-    // The domain name to resolve
-    char *domain = "google.com";
-
-    // The DNS server to use for resolution
-    char *dns_server = "8.8.8.8";
-
-    // Use getaddrinfo() to resolve the domain
-    struct addrinfo hints;
-    hints.ai_family = AF_INET;
-    hints.ai_socktype = SOCK_DGRAM;
-    hints.ai_flags = AI_ADDRCONFIG | AI_V4MAPPED | AI_CANONNAME;
-    struct addrinfo *results;
-    int error = getaddrinfo(domain, NULL, &hints, &results);
-    if (error) {
-        fprintf(stderr, "Error resolving domain: %s\n", gai_strerror(error));
-        exit(1);
-    }
-
-    // Print the results
-    for (struct addrinfo *result = results; result != NULL; result = result->ai_next) {
-        // Extract the IP address from the addrinfo structure
-        char ip_address[INET_ADDRSTRLEN];
-        struct sockaddr_in *sockaddr = (struct sockaddr_in *) result->ai_addr;
-        inet_ntop(AF_INET, &(sockaddr->sin_addr), ip_address, INET_ADDRSTRLEN);
-        printf("IP address for %s: %s\n", domain, ip_address);
-    }
-
-    // Clean up
-    freeaddrinfo(results);
-
-    return 0;
-}
-
-
-int main3(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     unsigned char hostname[100];
 

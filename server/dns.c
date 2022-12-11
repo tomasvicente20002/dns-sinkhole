@@ -1,16 +1,64 @@
 #include "dns.h"
 
-int get_name_len(const unsigned char *reader, char *name)
+u_char *ReadName(unsigned char *reader, unsigned char *buffer, int *count)
 {
-	int idx;
-	for (idx = 0; reader[idx] != 0; idx++)	{}
-	//memccpy(name,reader,0,idx);
-	return idx;
+    unsigned char *name;
+    unsigned int p = 0, jumped = 0, offset;
+    int i, j;
+
+    *count = 1;
+    name = (unsigned char *)malloc(256);
+
+    name[0] = '\0';
+
+    // read the names in 3www6google3com format
+    while (*reader != 0)
+    {
+        if (*reader >= 192)
+        {
+            offset = (*reader) * 256 + *(reader + 1) - 49152; // 49152 = 11000000 00000000 ;)
+            reader = buffer + offset - 1;
+            jumped = 1; // we have jumped to another location so counting wont go up!
+        }
+        else
+        {
+            name[p++] = *reader;
+        }
+
+        reader = reader + 1;
+
+        if (jumped == 0)
+        {
+            *count = *count + 1; // if we havent jumped to another location then we can count up
+        }
+    }
+
+    name[p] = '\0'; // string complete
+    if (jumped == 1)
+    {
+        *count = *count + 1; // number of steps we actually moved forward in the packet
+    }
+
+    // now convert 3www6google3com0 to www.google.com
+    for (i = 0; i < (int)strlen((const char *)name); i++)
+    {
+        p = name[i];
+        for (j = 0; j < (int)p; j++)
+        {
+            name[i] = name[i + 1];
+            i = i + 1;
+        }
+        name[i] = '.';
+    }
+    name[i - 1] = '\0'; // remove the last dot
+    return name;
 }
 
 BOOL dns_req_parse(dns_packet *pkt, const void *data, u_int16_t size)
 {
-	int len;
+	int stop;
+	const long *p;
+
 	pkt->row_packet_data = malloc(size);
 	memccpy(pkt->row_packet_data, data, 0, size);
 	// Parse the first 12 bytes that corresponds to the header
@@ -27,12 +75,13 @@ BOOL dns_req_parse(dns_packet *pkt, const void *data, u_int16_t size)
 	{
 		dns_answer answers[5];
 		unsigned char *reader;
-		reader = &data[sizeof(dns_header) + (12 + 1) + sizeof(dns_question_request)];
+		int len = strlen(pkt->question.qname);
+		reader = &data[sizeof(dns_header) + len + sizeof(dns_question_request)];
 
 		for (int i = 0; i < pkt->header.ancount; i++)
 		{
-			len = get_name_len(reader, answers[i].name);
-			reader = reader + len;
+			answers[i].name = ReadName(reader, data, &stop);
+			reader = reader + stop;
 
 			answers[i].resource = (dns_answer_details *)(reader);
 			reader = reader + sizeof(dns_answer_details);
@@ -53,22 +102,22 @@ BOOL dns_req_parse(dns_packet *pkt, const void *data, u_int16_t size)
 			else
 			{
 
-				len = get_name_len(reader, answers[i].rdata);
-				reader = reader + len;
+				answers[i].rdata = ReadName(reader, data, &stop);
+				reader = reader + stop;
 			}
 		}
 
 
 		// print answers
 		struct sockaddr_in a;
-		printf("\nAnswer Records : %d \n", ntohs(pkt->header.ancount));
+		printf("\nAnswer Records : %d \n", pkt->header.ancount);
 		for (int i = 0; i < pkt->header.ancount; i++)
 		{
-			//printf("Name : %s ", answers[i].name);
+			printf("Name : %s ",answers[i].name);
 
 			if (ntohs(answers[i].resource->type) == 1) // IPv4 address
 			{
-				long *p;
+				
 				p = (long *)answers[i].rdata;
 				a.sin_addr.s_addr = (*p); // working without ntohl
 				printf("has IPv4 address : %s", inet_ntoa(a.sin_addr));
@@ -217,9 +266,7 @@ BOOL dns_forward(const dns_packet *pkt)
 
 	qname = &buffer_request[sizeof(dns_header)];
 
-	unsigned char hostname[13] = "facebook.com";
-	ChangetoDnsNameFormat(qname, hostname);
-	//strcpy(qname,pkt->question.qname);
+	strcpy(qname,pkt->question.qname);
 
 	dns_question_request *question;
 	question = (dns_question_request *)&buffer_request[sizeof(dns_header) + (strlen((const char *)qname) + 1)];

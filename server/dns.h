@@ -96,13 +96,15 @@ typedef struct dns_packet_st
 	char *row_packet_data;
 } dns_packet;
 
+#pragma pack(push, 1)
 typedef struct dns_answer_details_st
 {
-    unsigned short type;
-    unsigned short _class;
+    u_int16_t type;
+    u_int16_t _class;
     unsigned int ttl;
-    unsigned short data_len;
+    u_int16_t data_len;
 } dns_answer_details;
+#pragma pack(pop)
 
 typedef struct dns_answer_st
 {
