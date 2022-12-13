@@ -84,9 +84,39 @@ typedef struct
     struct QUESTION *ques;
 } QUERY;
 
+#include <stdio.h>
+#include <arpa/inet.h>
 
+int main()
+{
+    // Convert hexadecimal number to string
+    char hex[] = "1F0D5324";
 
-int main(int argc, char *argv[])
+    // Split hexadecimal number into groups of two digits
+    char *group1 = malloc(sizeof(char) * 3);
+    memccpy(group1, hex, 0, 2);
+    char *group2 = malloc(sizeof(char) * 3);
+    memccpy(group2, &hex[2], 0, 2);
+    char *group3 = malloc(sizeof(char) * 3);
+    memccpy(group3, &hex[4], 0, 2);
+    char *group4 = malloc(sizeof(char) * 3);
+    memccpy(group4, &hex[6], 0, 2);
+    group1[3] = '\0';
+    group2[3] = '\0';
+    group3[3] = '\0';
+    group4[3] = '\0';
+
+    // Convert groups to decimal numbers
+    long num1 = strtol(group1, NULL, 16);
+    long num2 = strtol(group2, NULL, 16);
+    long num3 = strtol(group3, NULL, 16);
+    long num4 = strtol(group4, NULL, 16);
+
+    // Build IP address string
+    printf("IPV4 adress: %d.%d.%d.%d");
+}
+
+int main3(int argc, char *argv[])
 {
     unsigned char hostname[100];
 

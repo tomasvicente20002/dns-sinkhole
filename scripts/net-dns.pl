@@ -1,7 +1,7 @@
 use Net::DNS;
 
 my $res   = Net::DNS::Resolver->new (
-	nameservers => [qw(127.0.0.1)],
+	nameservers => [qw(localhost)],
 	recurse => 0,
 	debug => 1,
 	port => 53,

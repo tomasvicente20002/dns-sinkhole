@@ -1,0 +1,60 @@
+Date : 2022-12-12 20:48:45
+Directory : c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server
+Total : 18 files,  2799 codes, 154 comments, 292 blanks, all 3245 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          9 |      1,561 |          0 |          7 |      1,568 |
+| C          |          3 |        853 |         68 |        199 |      1,120 |
+| Log        |          2 |        206 |          0 |         17 |        223 |
+| Makefile   |          1 |        112 |         53 |         55 |        220 |
+| C++        |          2 |         65 |         33 |         13 |        111 |
+| TypeScript |          1 |          2 |          0 |          1 |          3 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                            | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                               |         18 |      2,799 |        154 |        292 |      3,245 |
+| build                                                                                                                           |         14 |      2,521 |        114 |        218 |      2,853 |
+| build\.cmake                                                                                                                    |          8 |      1,549 |          0 |          7 |      1,556 |
+| build\.cmake\api                                                                                                                |          8 |      1,549 |          0 |          7 |      1,556 |
+| build\.cmake\api\v1                                                                                                             |          8 |      1,549 |          0 |          7 |      1,556 |
+| build\.cmake\api\v1\query                                                                                                       |          1 |          1 |          0 |          0 |          1 |
+| build\.cmake\api\v1\query\client-vscode                                                                                         |          1 |          1 |          0 |          0 |          1 |
+| build\.cmake\api\v1\reply                                                                                                       |          7 |      1,548 |          0 |          7 |      1,555 |
+| build\CMakeFiles                                                                                                                |          3 |        845 |         61 |        155 |      1,061 |
+| build\CMakeFiles\3.24.3                                                                                                         |          1 |        640 |         61 |        138 |        839 |
+| build\CMakeFiles\3.24.3\CompilerIdC                                                                                             |          1 |        640 |         61 |        138 |        839 |
+| build\CMakeFiles\dns_server.dir                                                                                                 |          1 |          2 |          0 |          1 |          3 |
+| build\Testing                                                                                                                   |          1 |          3 |          0 |          1 |          4 |
+| build\Testing\Temporary                                                                                                         |          1 |          3 |          0 |          1 |          4 |
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                                        | language   | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\build\.cmake\api\v1\query\client-vscode\query.json                          | JSON       |          1 |          0 |          0 |          1 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\build\.cmake\api\v1\reply\cache-v2-4060fd0eba3169dcbcc7.json                | JSON       |      1,071 |          0 |          1 |      1,072 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\build\.cmake\api\v1\reply\cmakeFiles-v1-86e28d2c816084f68395.json           | JSON       |         97 |          0 |          1 |         98 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\build\.cmake\api\v1\reply\codemodel-v2-90d8ea6a7af8ca5a4b85.json            | JSON       |         60 |          0 |          1 |         61 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\build\.cmake\api\v1\reply\directory-.-Debug-f5ebdc15457944623624.json       | JSON       |         14 |          0 |          1 |         15 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\build\.cmake\api\v1\reply\index-2022-12-12T20-44-03-0944.json               | JSON       |        132 |          0 |          1 |        133 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\build\.cmake\api\v1\reply\target-dns_server-Debug-1cefb26cb3471e7defa4.json | JSON       |        122 |          0 |          1 |        123 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\build\.cmake\api\v1\reply\toolchains-v1-34b192cfca0c6ee75807.json           | JSON       |         52 |          0 |          1 |         53 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\build\CMakeFiles\3.24.3\CompilerIdC\CMakeCCompilerId.c                      | C          |        640 |         61 |        138 |        839 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\build\CMakeFiles\CMakeOutput.log                                            | Log        |        203 |          0 |         16 |        219 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\build\CMakeFiles\dns_server.dir\compiler_depend.ts                          | TypeScript |          2 |          0 |          1 |          3 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\build\Makefile                                                              | Makefile   |        112 |         53 |         55 |        220 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\build\Testing\Temporary\LastTest.log                                        | Log        |          3 |          0 |          1 |          4 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\build\compile_commands.json                                                 | JSON       |         12 |          0 |          0 |         12 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\dns.c                                                                       | C          |        150 |          6 |         39 |        195 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\dns.h                                                                       | C++        |         61 |         33 |         12 |        106 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\main.c                                                                      | C          |         63 |          1 |         22 |         86 |
+| c:\Users\lynxv\Documents\GitHub\dns-sinkhole\server\mylib.h                                                                     | C++        |          4 |          0 |          1 |          5 |
+| Total                                                                                                                           |            |      2,799 |        154 |        292 |      3,245 |
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

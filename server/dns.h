@@ -39,28 +39,13 @@ Total 96 bits = 12 Bytes
 */
 typedef struct dns_header_st
 {
-	u_int16_t id;	
-
-
-    u_int16_t rd : 1;     // recursion desired
-    u_int16_t tc : 1;     // truncated message
-    u_int16_t aa : 1;     // authoritive answer
-    u_int16_t opcode : 4; // purpose of message
-    u_int16_t qr : 1;     // query/response flag
-
-    u_int16_t rcode : 4; // response code
-    u_int16_t cd : 1;    // checking disabled
-    u_int16_t ad : 1;    // authenticated data
-    u_int16_t z : 1;     // its z! reserved
-    u_int16_t ra : 1;    // recursion available
-
-
-
+	u_int16_t id; /* a 16 bit identifier assigned by the client */
+	u_int16_t flags;
 	u_int16_t qdcount;
 	u_int16_t ancount;
 	u_int16_t nscount;
 	u_int16_t arcount;
-} dns_header;
+} __attribute__((packed)) dns_header;
 
 /*
 0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F
