@@ -5,5 +5,5 @@ enable_testing()
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(dns_server dns.c main.c)
+add_executable(dns_server mylib.c list.c dns.c main.c)
 target_link_libraries(dns_server PUBLIC m)

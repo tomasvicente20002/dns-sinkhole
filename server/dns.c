@@ -1,7 +1,9 @@
 #include "dns.h"
-void prinf_pk(const unsigned char  *buffer_request , int len_r)
-{
+#include "mylib.h"
 
+
+void prinf_pk(const unsigned char *buffer_request, int len_r)
+{
 	for (int idx = 0; idx < len_r; idx++)
 	{
 		if ((idx % 8) == 0)
@@ -14,39 +16,43 @@ void prinf_pk(const unsigned char  *buffer_request , int len_r)
 
 	printf("\n");
 }
-void convert_to_ip(const unsigned char* hexr)
+char * convert_to_ip(const unsigned char *hexr)
 {
-	unsigned char* hex =malloc(sizeof(char)*9);
-	sprintf(hex,"%02X%02X%02X%02X",hexr[0],hexr[1],hexr[2],hexr[3]);
+	// I don't why but i had to make this to format the number, it was giving me wird caracters
+	unsigned char *hex = malloc(sizeof(char) * 9);
+	sprintf(hex, "%02X%02X%02X%02X", hexr[0], hexr[1], hexr[2], hexr[3]);
 
-    // Split hexadecimal number into groups of two digits
-    char *group1 = malloc(sizeof(char) * 3);
-    memccpy(group1, hex, 0, 2);
-    char *group2 = malloc(sizeof(char) * 3);
-    memccpy(group2, &hex[2], 0, 2);
-    char *group3 = malloc(sizeof(char) * 3);
-    memccpy(group3, &hex[4], 0, 2);
-    char *group4 = malloc(sizeof(char) * 3);
-    memccpy(group4, &hex[6], 0, 2);
+	// split into octets
+	char *group1 = malloc(sizeof(char) * 3);
+	memccpy(group1, hex, 0, 2);
+	char *group2 = malloc(sizeof(char) * 3);
+	memccpy(group2, &hex[2], 0, 2);
+	char *group3 = malloc(sizeof(char) * 3);
+	memccpy(group3, &hex[4], 0, 2);
+	char *group4 = malloc(sizeof(char) * 3);
+	memccpy(group4, &hex[6], 0, 2);
 
-    group1[2] = '\0';
-    group2[2] = '\0';
-    group3[2] = '\0';
-    group4[2] = '\0';
+	group1[2] = '\0';
+	group2[2] = '\0';
+	group3[2] = '\0';
+	group4[2] = '\0';
 
-    // Convert groups to decimal numbers
-    unsigned long num1 = strtol(group1, NULL, 16);
-    unsigned long num2 = strtol(group2, NULL, 16);
-    unsigned long num3 = strtol(group3, NULL, 16);
-    unsigned long num4 = strtol(group4, NULL, 16);
+	// Convert groups to decimal numbers
+	unsigned long num1 = strtol(group1, NULL, 16);
+	unsigned long num2 = strtol(group2, NULL, 16);
+	unsigned long num3 = strtol(group3, NULL, 16);
+	unsigned long num4 = strtol(group4, NULL, 16);
 
 	free(group1);
 	free(group2);
 	free(group3);
 	free(group4);
 	free(hex);
+	char *ip  = malloc(sizeof(char) * 16);
+	sprintf(ip,"%ld.%ld.%ld.%ld",num1, num2, num3, num4);
 
-	printf("IPV4 adress -> %ld.%ld.%ld.%ld \n", num1,num2,num3,num4);
+	printf("IPV4 adress -> %ld.%ld.%ld.%ld \n", num1, num2, num3, num4);
+	return ip;;
 }
 BOOL dns_req_parse(dns_packet *pkt, const void *data, u_int16_t size)
 {
@@ -82,7 +88,8 @@ BOOL dns_header_parse(dns_header *header, const void *data)
 	header->ancount = ntohs(header->ancount);
 	header->nscount = ntohs(header->nscount);
 	header->arcount = ntohs(header->arcount);
-	print_dns_header_parse(header);
+	if (VERBOSE_DNS)
+		print_dns_header_parse(header);
 	return TRUE;
 }
 void print_dns_question_parse(const dns_question question)
@@ -109,13 +116,13 @@ BOOL dns_question_parse(dns_packet *pkt)
 	pkt->question.qtype = (unsigned short)pkt->data[i + 1];
 	pkt->question.qclass = (unsigned short)pkt->data[i + 3];
 
-	print_dns_question_parse(pkt->question);
+	if (VERBOSE_DNS)
+		print_dns_question_parse(pkt->question);
 
 	return TRUE;
 }
 
-
-BOOL dns_forward(const dns_packet *pkt)
+char *dns_get_ip(const dns_packet *pkt)
 {
 	int sockfd;
 	unsigned char buffer_answer[65536];
@@ -144,7 +151,7 @@ BOOL dns_forward(const dns_packet *pkt)
 	header = (dns_header *)&buffer_request;
 	header->id = htons(getpid());
 	header->flags = htons(0x0100); // This is a query
-	header->qdcount = htons(1);	   // we have only 1 question
+	header->qdcount = htons(1);
 	header->ancount = htons(0);
 	header->nscount = htons(0);
 	header->arcount = htons(0);
@@ -158,11 +165,6 @@ BOOL dns_forward(const dns_packet *pkt)
 	question->qtype = htons(1);
 	question->qclass = htons(1);
 
-	printf("-----------------------dns_forward--------------------------\n");
-	
-
-
-
 	u_int16_t t = (u_int16_t)sendto(
 		sockfd,
 		(char *)buffer_request,
@@ -171,7 +173,7 @@ BOOL dns_forward(const dns_packet *pkt)
 		(struct sockaddr *)&servaddr,
 		sizeof(servaddr));
 
-	printf("client: %s %d\n", strerror(errno), t);
+	log_message(INFO,"Foward resposnse %s %d\n", strerror(errno), t);
 
 	req_size = (u_int16_t)recvfrom(
 		sockfd,
@@ -183,13 +185,13 @@ BOOL dns_forward(const dns_packet *pkt)
 
 	dns_packet *req_pkt = calloc(1, sizeof(dns_packet));
 
-
 	dns_req_parse(req_pkt, buffer_answer, req_size);
 
-	convert_to_ip(&buffer_answer[req_size-4]);
-
+	char *ip = convert_to_ip(&buffer_answer[req_size - 4]);
+	
 	free(req_pkt);
 	close(sockfd);
 
-	return 0;
+
+	return ip;
 }

@@ -12,7 +12,7 @@
 #define DNS_LOCAl_IP "0.0.0.0"
 #define DNS_EXTERNAL_IP "8.8.8.8"
 #include "mylib.h"
-
+#define VERBOSE_DNS 0
 
 
 /*
@@ -81,26 +81,21 @@ typedef struct dns_packet_st
 	char *row_packet_data;
 } dns_packet;
 
-#pragma pack(push, 1)
-typedef struct dns_answer_details_st
+typedef struct dns_answer_st
 {
+    unsigned char *name;
     u_int16_t type;
     u_int16_t _class;
     unsigned int ttl;
     u_int16_t data_len;
-} dns_answer_details;
-#pragma pack(pop)
-
-typedef struct dns_answer_st
-{
-    unsigned char *name;
-    dns_answer_details *resource;
     unsigned char *rdata;
 } dns_answer;
+
+
 
 
 
 BOOL dns_question_parse(dns_packet *pkt);
 BOOL dns_header_parse(dns_header *header, const void *data);
 BOOL dns_req_parse(dns_packet *pkt, const void *data, u_int16_t size);
-BOOL dns_forward(const dns_packet *pkt);
+char * dns_get_ip(const dns_packet *pkt);
